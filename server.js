@@ -30,10 +30,10 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Load Complete Knowledge Base - NOW WITH 7 VOLUMES
+// Load Complete Knowledge Base - NOW WITH 8 VOLUMES
 let COMPLETE_KNOWLEDGE_BASE = '';
 try {
-  // Load all 7 volumes from files
+  // Load all 8 volumes from files
   const vol1 = fs.readFileSync(path.join(__dirname, 'kb-vol1-core.txt'), 'utf8');
   const vol2 = fs.readFileSync(path.join(__dirname, 'kb-vol2-strategic.txt'), 'utf8');
   const vol3 = fs.readFileSync(path.join(__dirname, 'kb-vol3-analysis.txt'), 'utf8');
@@ -41,9 +41,10 @@ try {
   const vol5 = fs.readFileSync(path.join(__dirname, 'kb-vol5-userguide.txt'), 'utf8');
   const vol6 = fs.readFileSync(path.join(__dirname, 'kb-vol6-whatif.txt'), 'utf8');
   const vol7 = fs.readFileSync(path.join(__dirname, 'kb-vol7-prompts.txt'), 'utf8');
+  const vol8 = fs.readFileSync(path.join(__dirname, 'kb-vol8-horizons.txt'), 'utf8');
   
   COMPLETE_KNOWLEDGE_BASE = `
-# VUESENSE AI - COMPLETE KNOWLEDGE BASE (7 VOLUMES)
+# VUESENSE AI - COMPLETE KNOWLEDGE BASE (8 VOLUMES)
 
 ${vol1}
 
@@ -58,11 +59,13 @@ ${vol5}
 ${vol6}
 
 ${vol7}
+
+${vol8}
 `;
   
-  console.log('✅ Knowledge Base loaded successfully (7 volumes)');
+  console.log('✅ Knowledge Base loaded successfully (8 volumes)');
   console.log(`📚 Total KB size: ${(COMPLETE_KNOWLEDGE_BASE.length / 1024).toFixed(2)} KB`);
-  console.log(`📖 Volumes loaded: Core, Strategic, Analysis, Reference, User Guide, What-If, Prompts`);
+  console.log(`📖 Volumes loaded: Core, Strategic, Analysis, Reference, User Guide, What-If, Prompts, Horizons`);
 } catch (error) {
   console.error('ERROR loading knowledge base:', error);
   // Fallback to minimal KB if files not found
@@ -80,7 +83,7 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     kbLoaded: COMPLETE_KNOWLEDGE_BASE.length > 1000,
     kbSize: `${(COMPLETE_KNOWLEDGE_BASE.length / 1024).toFixed(2)} KB`,
-    volumes: 7
+    volumes: 8
   });
 });
 
@@ -114,7 +117,7 @@ ${portfolioData}
 ==== CRITICAL INSTRUCTIONS ====
 
 **Knowledge Base Usage:**
-- You have access to the COMPLETE 7-volume knowledge base above - use ALL of it
+- You have access to the COMPLETE 8-volume knowledge base above - use ALL of it
 - Apply EXACT formulas from Volume 1 for calculations
 - Use frameworks from Volume 2 for strategic questions
 - Apply patterns from Volume 3 for analysis
@@ -122,6 +125,7 @@ ${portfolioData}
 - Answer "how to" questions using Volume 5
 - Use Volume 6 for ALL "What if" scenario analysis - report BOTH slot AND row changes
 - Use Volume 7 to recognize flexible prompt variations
+- Use Volume 8 for Three Horizons strategic analysis - BUT use multi-dimensional approach (data + synthesis + frameworks)
 
 **Data Validation (CRITICAL):**
 - BEFORE analyzing ANY query, verify all initiatives and teams exist in the portfolio data
@@ -130,13 +134,13 @@ ${portfolioData}
 - NEVER make up initiatives, teams, or data
 - NEVER proceed with fictional analysis
 
-**Response Quality:**
-- ALWAYS reference specific team names and initiative names from the portfolio data
-- NEVER give generic responses - be specific and actionable
-- Default to conversational tone (3-5 sentences), not structured bullet points
-- Only use structured format if user asks for "detailed analysis" or "breakdown"
-- End responses with engagement hook: "Want the details?" or "Should I show the math?"
-- Lead with the answer, then offer details if needed
+**Response Strategy for Portfolio Questions:**
+- Start with direct data analysis (team health, risk scores, capacity) - ALWAYS FIRST
+- Synthesize patterns and systemic issues - SECOND
+- Offer strategic frameworks (Three Horizons, etc.) progressively - ONLY IF RELEVANT
+- Don't force every answer through frameworks - mix quantitative data with strategic context
+- Use progressive disclosure: "Want more context?" / "Curious about the strategic picture?"
+- For broad questions like "Is portfolio healthy?", combine multiple lenses (data + patterns + strategy)
 
 **What-If Scenarios:**
 - Report ONLY relevant initiatives (directly displaced, row changes, Mendoza crossings)
