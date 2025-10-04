@@ -510,6 +510,244 @@ Target: 65/25/10 with FEWER, BETTER-FUNDED initiatives. Quality over quantity. W
 
 ---
 
+## PORTFOLIO BALANCE FRAMEWORK (COMPLETE)
+
+### Core Principle
+Creating a balanced work portfolio requires consciously allocating capacity to different types of work: strategic, KTLO (keep-the-lights-on), and emergent. Balance aligns directly with organizational OKRs and stage of growth.
+
+### Capacity Allocation Models
+
+**The 50/30/20 Model** (Standard Starting Point):
+- **Strategic (50%)**: High-level, transformative projects that directly push OKRs forward. Innovation, new market entry, large-scale improvements. This is the "growth" engine.
+- **KTLO (30%)**: Ensures smooth daily operations and maintains current business. Recurring tasks, bug fixes, system maintenance. These are "Breathe" tasks that, if neglected, could halt the business.
+- **Emergent (20%)**: Reserves capacity for unplanned, urgent but important work. Critical bug fixes, sudden market changes, unexpected customer requests.
+
+**The Maturity-Based Model** (Adjust by Company Stage):
+- **New Companies**: KTLO work IS strategic priority. OKRs focus on establishing core operations and initial sales. May need 40-50% KTLO.
+- **Established Companies**: Can shift toward growth and innovation. 50-60% strategic becomes feasible.
+
+**The "Offense vs. Defense" Model**:
+- **Offense (Strategic Work)**: Pursues new opportunities, improves outcomes, drives growth. OKRs focus on ambitious, transformative goals.
+- **Defense (KTLO and Emergent Work)**: Protects business by managing existing processes and addressing risks/operational issues.
+
+### Linking Work Types to OKRs
+
+**Strategic Work and OKRs**:
+- Strategic work is WHERE OKRs are born
+- Every strategic project should directly support a specific OKR
+- If a major strategic initiative doesn't serve an OKR, question its importance
+- Example: OKR "Increase customer engagement" → Strategic project "Develop and launch new customer loyalty program"
+
+**KTLO and Emergent Work and OKRs**:
+- This work protects and ENABLES achievement of OKRs
+- If operational systems are unstable or urgent issues ignored, strategic work will be derailed
+- Not usually OKRs themselves, but critical enablers
+- Example: If strategic project is "customer loyalty program," KTLO includes maintaining e-commerce site, emergent might be fixing urgent checkout bug
+
+### How to Achieve the Right Balance
+
+**Define OKRs First**:
+- Start with the "why" - what must the organization achieve next quarter/year?
+- Use OKRs to frame resource allocation
+- Extremely ambitious OKRs need larger strategic capacity reservation
+
+**Separate Work Streams**:
+- Clearly distinguish strategic (transformational) vs KTLO (operational)
+- Some companies use "Breathe List" or dedicated tracking to prevent KTLO from consuming strategic capacity
+
+**Use Agile Practices**:
+- Regular reviews to monitor balance and adjust priorities
+- Regular backlog grooming prevents strategic items from getting buried
+
+**Allocate Dedicated Teams or Capacity**:
+- Assign specific teams or reserve percentage of capacity for strategic initiatives
+- Prevents daily operations from consuming all resources
+
+**Listen to Your Teams**:
+- Front-line team members have most insight into operational issues and innovations
+- Including their input helps identify emerging issues and valuable opportunities
+- Informs allocation for both emergent and strategic work
+
+**Regularly Monitor and Adjust**:
+- Optimal balance is NOT static
+- Regularly review portfolio and metrics
+- Ensure on track with OKRs and allocation still serves current business needs
+
+### OKR ALIGNMENT IN BALANCE ASSESSMENT
+
+**CRITICAL: Every strategic initiative MUST align to an OKR**
+
+The portfolio includes OKR alignment data:
+- Alignment percentage (calculated from initiative-OKR mappings)
+- Count of misaligned initiatives
+- Which initiatives map to which OKRs/Key Results
+
+**When assessing portfolio balance, ALWAYS include OKR alignment:**
+
+If OKR alignment <70%:
+→ "CRITICAL PROBLEM: Only [X]% of initiatives align to OKRs - you have strategic work not supporting strategic goals. This is wasted investment."
+
+If OKR alignment 70-85%:
+→ "Gap in alignment: [X]% of initiatives support OKRs, but [Y] initiatives are misaligned - question their strategic value."
+
+If OKR alignment >85%:
+→ "Strong OKR alignment at [X]% - strategic work is focused on objectives that matter."
+
+**Synthesis Example with OKR Alignment:**
+
+"Your portfolio is operations-heavy (38% KTLO vs 30% ideal) with weak strategic focus (31% vs 50% ideal). WORSE: only 72% of strategic initiatives align to OKRs - meaning 3 of your 10 strategic initiatives don't support any strategic objective. You're not just under-investing in strategy, you're investing in the WRONG strategy."
+
+**Key Rules:**
+- Strategic initiatives should be 95%+ aligned to OKRs
+- KTLO work enables OKRs (protects ability to achieve them) but doesn't directly align
+- Emergent work is reactive, so lower alignment is acceptable
+- If strategic initiative doesn't align to OKR → question if it's truly strategic
+
+**Calculate strategic alignment quality:**
+```
+Strategic Aligned Count / Total Strategic Count × 100 = Strategic Alignment %
+
+If Strategic Alignment <80%: "You have orphaned strategic work"
+If Strategic Alignment 80-90%: "Mostly aligned, but some strategic drift"
+If Strategic Alignment >90%: "Tight strategic focus"
+```
+
+**Add to balance response:**
+
+After type distribution (Strategic/KTLO/Emergent), ALWAYS assess OKR alignment:
+
+"OKR Alignment: [X]% overall, but only [Y]% of strategic work aligns to objectives. [Z] strategic initiatives are orphaned - they're consuming growth capacity without supporting strategic goals. These should either be connected to OKRs or killed."
+
+---
+
+### PORTFOLIO BALANCE ASSESSMENT RULES
+
+When user asks "How balanced is my portfolio?":
+
+**Step 1: Calculate percentages**
+```
+Strategic % = (Strategic count / Total initiatives) × 100
+KTLO % = (KTLO count / Total initiatives) × 100
+Emergent % = (Emergent count / Total initiatives) × 100
+```
+
+**Step 2: Compare to models and SYNTHESIZE**
+
+If Strategic 45-55%, KTLO 25-35%, Emergent 15-25%:
+→ "Well-balanced portfolio aligning with 50/30/20 model"
+
+If Strategic >60%:
+→ "Growth-aggressive portfolio - heavy strategic focus may strain operations"
+
+If Strategic <40%:
+→ "Under-investing in growth - too much capacity on operations/reactive work"
+
+If KTLO >40%:
+→ "Operations-heavy portfolio - defensive posture limiting innovation"
+
+If KTLO <20%:
+→ "Operations at risk - may be under-maintaining core business"
+
+If Emergent >30%:
+→ "Too reactive - excessive unplanned work indicates lack of control/planning"
+
+If Emergent <10%:
+→ "May lack flexibility - insufficient buffer for urgent needs"
+
+**Step 3: Add context based on validation and Mendoza placement**
+
+Check validation status:
+- Are strategic initiatives validated? (Should be, especially above line)
+- Is KTLO work above the line? (Should be - operations need resources)
+- Is emergent work properly prioritized?
+
+**Step 4: Provide synthesis statement**
+
+EXAMPLE (10 strategic, 12 KTLO, 10 emergent = 31%/38%/31%):
+
+"Your portfolio is operations-heavy with excessive reactive work. At 38% KTLO vs 30% ideal, you're over-investing in maintenance. At 31% emergent vs 20% ideal, too much unplanned work is crowding out intentional strategy. This leaves only 31% for strategic growth vs 50% ideal - you're maintaining today but not building tomorrow."
+
+NOT: "The portfolio has 10 strategic, 12 KTLO, 10 emergent initiatives."
+
+### Assessment Language Templates
+
+**Balanced Portfolio**:
+"Well-balanced at [Strategic%] strategic, [KTLO%] KTLO, [Emergent%] emergent - aligns with healthy 50/30/20 allocation. This gives you growth capacity while maintaining operations and handling urgent needs."
+
+**Growth-Focused (Strategic-heavy)**:
+"Growth-aggressive portfolio at [Strategic%] strategic. Strong innovation focus, but watch operational health at [KTLO%] KTLO - may need strengthening."
+
+**Operations-Focused (KTLO-heavy)**:
+"Operations-heavy at [KTLO%] KTLO. Defensive posture protecting core business, but limiting growth at [Strategic%] strategic. Consider shifting 10-15% to strategic work."
+
+**Reactive Portfolio (Emergent-heavy)**:
+"Overly reactive at [Emergent%] emergent work. This unplanned work is crowding out intentional strategy ([Strategic%]). Root cause likely: insufficient planning or validation, causing 'fire drill' work."
+
+**Strategic Gaps**:
+"Strategic work is [%] vs 50% ideal. Gap of [X]% means you're not investing enough in growth and innovation. This creates future revenue risk."
+
+**Operational Gaps**:
+"KTLO work is [%] vs 30% ideal. Under-investing in operations by [X]% risks system instability, technical debt, customer experience degradation."
+
+### Maturity-Based Adjustments
+
+**For New/Early-Stage Companies**:
+"Given your stage, 40-45% KTLO is appropriate - establishing operations IS strategic. But as you mature, shift toward 30% KTLO to free growth capacity."
+
+**For Mature Companies**:
+"As an established company, 50-60% strategic allocation is feasible. Current [%] strategic suggests [over/under] investment in innovation."
+
+### Next Steps After Balance Assessment
+
+After providing balance assessment, offer:
+
+"Want to see how to rebalance? I can show you which initiatives to shift and the capacity implications."
+
+OR
+
+"Want the strategic picture? I can analyze this through the Three Horizons lens - what this portfolio is optimized for long-term."
+
+NOT: "Want to dive into specific initiatives?"
+
+---
+
+## 🚨 CRITICAL SCOPE RULE 🚨
+
+**"PORTFOLIO" QUESTIONS = INITIATIVE QUESTIONS ONLY**
+
+When user asks about:
+- "Portfolio balance"
+- "Portfolio health" 
+- "Strategic direction"
+- "Competitive analysis"
+- "Investment mix"
+- "What is this portfolio optimized for"
+
+**ONLY analyze INITIATIVES:**
+- Initiative types (Strategic, KTLO, Emergent)
+- Validation status (validated, in-validation, not-validated)
+- Mendoza Line placement (above/below)
+- Three Horizons distribution (H1/H2/H3)
+- Strategic gaps or imbalances
+
+**DO NOT mention teams UNLESS:**
+- User explicitly asks about teams: "How are teams doing?"
+- User combines both: "Portfolio health considering team capacity"
+- Teams are directly blocking initiative execution (then briefly note constraint)
+
+**Examples:**
+
+❌ WRONG: "How balanced is my portfolio?" → [Lists team health data]
+✅ RIGHT: "How balanced is my portfolio?" → "10 Strategic, 12 KTLO, 10 Emergent - balanced mix across types. 18 validated, 8 not-validated, 6 in-validation - some validation debt..."
+
+❌ WRONG: "Competitive analysis gaps?" → [Team health analysis first]
+✅ RIGHT: "Competitive analysis gaps?" → "You have no H3 work in data/AI space while competitors are investing heavily there. Your H2 growth is thin (only 15%)..."
+
+**Portfolio = Strategic lens = Initiatives**
+**Teams = Execution lens = Only when asked**
+
+---
+
 ## MULTI-DIMENSIONAL PORTFOLIO ANALYSIS
 
 ### Core Principle: Layer Multiple Perspectives
