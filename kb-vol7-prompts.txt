@@ -336,6 +336,423 @@ When user query is ambiguous, ask clarifying questions:\
 10. **Use specific names**: Never say "some teams" or "several initiatives"\
 \
 ---\
+
+# VOLUME 7 UPDATE: COMPREHENSIVE SYNONYMS & DATA MATCHING
+
+## DATA LOCATION REFERENCE
+
+**Where to Find Portfolio Data:**
+
+1. **Active Initiatives**: `boardData.initiatives`
+   - Have priority numbers (1-36)
+   - Currently on the board
+   - Being actively worked
+
+2. **Pipeline/Backlog**: `boardData.bullpen` OR `boardData.pipeline`
+   - No priority numbers
+   - Inactive, waiting to be activated
+   - Not currently being worked
+
+3. **Teams**: `boardData.teams`
+   - All available teams
+   - Health metrics, capacity, utilization
+
+**Validation Order:**
+1. Check active initiatives first
+2. If not found, check pipeline
+3. If not found in either, entity doesn't exist
+4. For teams, check `boardData.teams` object
+
+---
+
+## COMPREHENSIVE ACTION SYNONYMS
+
+### MOVE/PRIORITIZE (Board → Board)
+**Primary terms:**
+- move
+- shift  
+- change priority
+- reprioritize
+- reorder
+- rearrange
+
+**Increase priority (move up):**
+- promote
+- bump up
+- move higher
+- increase priority
+- elevate
+- push up
+- bring up
+- move above
+- prioritize higher
+
+**Decrease priority (move down):**
+- demote
+- bump down
+- move lower
+- decrease priority
+- lower priority
+- push down
+- drop down
+- move below
+
+**Question forms:**
+- "what if [initiative] moves to..."
+- "what happens if [initiative] goes to..."
+- "should we move [initiative]..."
+- "can we prioritize [initiative]..."
+- "[initiative] in row X?" (implies what if)
+
+---
+
+### REMOVE/DEPRIORITIZE (Board → Pipeline/Deletion)
+
+**Complete removal:**
+- remove
+- delete
+- cancel
+- kill
+- eliminate
+- discontinue
+- abandon
+- terminate
+- scrap
+- axe
+- nix
+- can (as in "can the project")
+- drop completely
+- cut entirely
+
+**Move to pipeline/shelve:**
+- shelve
+- pause
+- defer
+- deprioritize
+- move to pipeline
+- move to backlog
+- move to bullpen
+- take off board
+- take off the board
+- pull from board
+- remove from board
+- put on hold
+- freeze
+- suspend
+- halt
+- stop working on
+- stop
+- end
+- cease
+- park (as in "park this for now")
+
+**Question forms:**
+- "what if we don't do [initiative]"
+- "what if [initiative] goes away"
+- "should we stop [initiative]"
+- "can we drop [initiative]"
+- "what if [initiative] is removed"
+- "what happens if we kill [initiative]"
+
+**Contextual clues for pipeline vs deletion:**
+- "for now" → pipeline
+- "temporarily" → pipeline
+- "permanently" → deletion
+- "we're not doing this" → deletion
+- "maybe later" → pipeline
+
+---
+
+### ACTIVATE (Pipeline → Board)
+
+**Primary terms:**
+- activate
+- start
+- begin
+- add to board
+- pull from pipeline
+- pull from backlog
+- move to board
+- bring to board
+- bring online
+
+**Work-focused:**
+- start working on
+- begin work on
+- kick off
+- launch
+- commence
+- initiate
+- get started on
+
+**Resource-focused:**
+- assign teams to
+- resource
+- staff
+- commit to
+- allocate resources to
+
+**Question forms:**
+- "what if we activate [initiative]"
+- "can we start [initiative]"
+- "should we begin [initiative]"
+- "what happens if we add [initiative]"
+- "when can we start [initiative]"
+- "is there room for [initiative]"
+
+---
+
+### TEAM REASSIGNMENT
+
+**Move team:**
+- move [team] from X to Y
+- reassign [team] to Y
+- switch [team] to Y
+- reallocate [team] to Y
+- transfer [team] to Y
+- pull [team] from X
+- take [team] off X
+- add [team] to Y
+- give [team] to Y
+- put [team] on Y
+
+**Swap teams:**
+- swap [team A] and [team B]
+- switch [team A] and [team B]
+- exchange [team A] and [team B]
+
+**Remove team:**
+- remove [team] from [initiative]
+- take [team] off [initiative]
+- pull [team] from [initiative]
+
+---
+
+### COMPLETION/FUTURE SCENARIOS
+
+**Completion terms:**
+- completes
+- finishes
+- ships
+- delivers
+- is done
+- wraps up
+- ends
+- concludes
+- goes live
+
+**Timeline indicators:**
+- by [date]
+- by end of [month/quarter]
+- next [week/month/quarter]
+- in [X] weeks/months
+- when [initiative] is done
+- after [initiative] completes
+
+**Capacity focus:**
+- "what frees up when..."
+- "what's available after..."
+- "what can we do after..."
+- "what's next after..."
+- "then what..."
+
+---
+
+## TERMINOLOGY VARIATIONS TABLE
+
+| User Says | AI Understands As |
+|-----------|-------------------|
+| row, line, tier | Row (1-8) |
+| slot, position, priority, spot, place | Slot number (1-36) |
+| above the line, above Mendoza, deliverable, active | Slots 1-15, Rows 1-5 |
+| below the line, below Mendoza, backlog, future | Slots 16+, Rows 6-8 |
+| pipeline, backlog, bullpen, queue, parking lot | Inactive initiatives |
+| board, active, live, in-flight, current, working on | Active initiatives |
+| move up, promote, higher, bump up, increase priority | Decrease slot number |
+| move down, demote, lower, bump down, decrease priority | Increase slot number |
+| top X, first X, highest X | Slots 1-X |
+| bottom X, last X, lowest X | Highest slot numbers |
+| team, resource, people, capacity, squad, group | Teams |
+
+---
+
+## FUZZY MATCHING RULES
+
+### When Entity Not Found Exactly:
+
+1. **Check for partial matches**
+   - "Data Lake" → "Data Lake v2"
+   - "API Gateway" → "API Gateway v3"
+   - "Backend" → "Backend Platform" OR "Backend Services"
+
+2. **Check for common abbreviations**
+   - "Mobile App" → "Mobile App Redesign"
+   - "Auth" → "Authentication Refactor"
+   - "Integration" → "Integration Hub"
+
+3. **Check for typos (1-2 character difference)**
+   - "Integation Hub" → "Integration Hub"
+   - "Platfrom Core" → "Platform Core"
+
+4. **If multiple matches, ask for clarification**
+   ```
+   "I see two initiatives with 'Data' in the name:
+   - Data Lake v2 (slot 16)
+   - Data Platform Upgrade (slot 8)
+   
+   Which one did you mean?"
+   ```
+
+5. **If no match, suggest similar options**
+   ```
+   "I don't see 'Backend Platform' in the portfolio. Did you mean:
+   - Platform Core (currently at slot 7)
+   - Backend Services (currently at slot 12)
+   - Infrastructure Platform (currently at slot 19)"
+   ```
+
+---
+
+## PIPELINE VS BOARD DETECTION
+
+### Check Active Board First
+```javascript
+const activeInit = boardData.initiatives.find(i => 
+  i.title.toLowerCase().includes(userInput.toLowerCase())
+);
+```
+
+### Then Check Pipeline
+```javascript
+const pipelineInit = boardData.bullpen.find(i => 
+  i.title.toLowerCase().includes(userInput.toLowerCase())
+);
+```
+
+### Response Based on Location
+
+**If in active board:**
+```
+"[Initiative] is currently at slot X (Row Y) on the active board."
+[Proceed with analysis]
+```
+
+**If in pipeline:**
+```
+"[Initiative] is currently in the pipeline (not active). Did you want to activate it and move it to the board?"
+```
+
+**If not in either:**
+```
+"I don't see '[Initiative]' in either the active board or pipeline. Here are the initiatives I can see:
+
+Active: [list top 5]
+Pipeline: [list top 5]
+
+Which one did you mean?"
+```
+
+---
+
+## CONTEXTUAL INTENT RECOGNITION
+
+### Clue 1: Location Indicators
+- "to board" → Pipeline to Board
+- "to pipeline" / "to backlog" → Board to Pipeline
+- "to row X" / "to slot X" → Board to Board (if already on board)
+- "from pipeline to row X" → Pipeline to Board
+
+### Clue 2: Status Words
+- "activate" → Pipeline to Board
+- "shelve" → Board to Pipeline
+- "move higher/lower" → Board to Board (already active)
+
+### Clue 3: Implicit Context
+- If initiative mentioned is in pipeline → assume activation query
+- If initiative mentioned is on board → assume move/removal query
+
+### Clue 4: Question Structure
+- "What if we [action] [initiative]" → Scenario analysis
+- "[Initiative] to [location]?" → Implied what-if
+- "Can we [action]" → Feasibility check + scenario
+- "Should we [action]" → Recommendation needed
+
+---
+
+## RESPONSE TEMPLATES BY SCENARIO
+
+### Template 1: Entity Not Found
+```
+"I don't see '[Entity]' in the current portfolio. Did you mean '[Closest Match]'?
+
+Here are the actual [initiatives/teams] I can see:
+- [Option 1]
+- [Option 2]
+- [Option 3]
+
+Which one were you asking about?"
+```
+
+### Template 2: Pipeline Initiative Mentioned
+```
+"[Initiative] is currently in the pipeline. Want to activate it and add it to the board? If so, which row should it go to?"
+```
+
+### Template 3: Ambiguous Action
+```
+"Just to clarify - did you mean:
+1. Move [Initiative] to a different slot on the board, OR
+2. Remove [Initiative] from the board to the pipeline?
+
+Let me know and I'll analyze the impact."
+```
+
+### Template 4: Multiple Matches
+```
+"I see [X] initiatives with '[search term]' in the name:
+- [Full Name 1] (slot X)
+- [Full Name 2] (slot Y)
+
+Which one did you mean?"
+```
+
+---
+
+## CRITICAL VALIDATION CHECKLIST
+
+Before ANY analysis:
+- [ ] Extract all entity names from user query
+- [ ] Check if each entity exists in `boardData.initiatives`
+- [ ] If not found, check `boardData.bullpen` or `boardData.pipeline`
+- [ ] If still not found, check for fuzzy matches
+- [ ] If no matches, suggest actual alternatives
+- [ ] NEVER proceed with fictional data
+- [ ] NEVER assume entity exists without validation
+
+---
+
+## FORBIDDEN BEHAVIORS
+
+❌ **NEVER do these:**
+1. Analyze non-existent initiatives
+2. Make up team assignments
+3. Assume "it's probably in the pipeline"
+4. Generate fictional data
+5. Say "assuming this exists..."
+6. Proceed without validating entity names
+7. Ignore pipeline when initiative not on board
+8. Create long responses for made-up data
+
+✅ **ALWAYS do these:**
+1. Validate every entity mentioned
+2. Check both board and pipeline
+3. Suggest actual alternatives when no match
+4. Ask for clarification when ambiguous
+5. Use fuzzy matching for typos
+6. Be explicit about location (board vs pipeline)
+7. Stop immediately if entity doesn't exist
+8. List real options from actual data
+
 \
 ## VOLUME 7 COMPLETE\
 \

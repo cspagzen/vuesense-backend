@@ -163,3 +163,235 @@ Every what-if analysis MUST include:\
 - What else should we consider?\
 - What mitigations are needed?\
 - Alternative options to explore}
+
+# VOLUME 6 UPDATE: REMOVAL LOGIC & CASCADING
+
+## CRITICAL FIX: REMOVAL CASCADING LOGIC
+
+### How Removal Works (OPPOSITE of Adding)
+
+When an initiative is **REMOVED** from the board:
+- All initiatives BELOW it shift **UP** by 1 slot to fill the gap
+- This is the OPPOSITE of adding (which shifts everything DOWN)
+
+**Example: Removing initiative at slot 10**
+```
+BEFORE REMOVAL:
+Slot 10: Initiative X (being removed)
+Slot 11: Initiative A
+Slot 12: Initiative B
+Slot 13: Initiative C
+...
+Slot 15: Initiative Z
+Slot 16: Initiative Q (below Mendoza Line)
+
+AFTER REMOVAL:
+Slot 10: Initiative A (moved UP from 11)
+Slot 11: Initiative B (moved UP from 12)
+Slot 12: Initiative C (moved UP from 13)
+...
+Slot 14: Initiative Z (moved UP from 15)
+Slot 15: Initiative Q (moved UP from 16) ← CROSSES ABOVE MENDOZA LINE!
+```
+
+### Key Implications of Removal
+
+1. **Gap Filling**: The removed slot is immediately filled by the next initiative
+2. **Upward Cascade**: Everything below moves UP, not down
+3. **Mendoza Crossings**: Initiative at slot 16 moves to slot 15 (crosses ABOVE line)
+4. **Priority Improvement**: All initiatives below get better priority (lower slot numbers)
+
+---
+
+## REMOVAL SYNONYMS (Complete List)
+
+The AI must recognize ALL these terms as "remove from board":
+
+### Primary Removal Terms
+- remove
+- delete
+- cancel
+- kill
+- eliminate
+- discontinue
+- abandon
+
+### Deprioritization Terms  
+- shelve
+- pause
+- defer
+- deprioritize
+- move to pipeline
+- move to backlog
+- move to bullpen
+- take off board
+- take off the board
+- pull from board
+
+### Stop/End Terms
+- stop
+- end
+- stop working on
+- halt
+- cease
+- suspend
+- put on hold
+- freeze
+
+### Informal Terms
+- drop
+- cut
+- ditch
+- scrap
+- nix
+- axe
+- can (as in "can the project")
+
+### Question Forms
+- "what if we don't do [initiative]"
+- "what if [initiative] goes away"
+- "should we stop [initiative]"
+- "can we drop [initiative]"
+
+---
+
+## BOARD → PIPELINE MOVES
+
+### Key Distinction
+- **Remove completely** = Initiative disappears, no longer tracked
+- **Move to pipeline** = Initiative moves to inactive backlog, may return later
+
+### When User Says "Shelve" or "Deprioritize"
+Default to **move to pipeline** (not complete removal), unless user specifies:
+- "remove completely"
+- "cancel permanently"  
+- "we're not doing this anymore"
+
+### Response for Pipeline Moves
+```
+"Moving Integration Hub to the pipeline frees up Integration Services and API Platform teams - about 40% combined capacity. This deprioritizes the work but keeps it available for future activation. Everything below Integration Hub shifts up by 1 slot, so the initiative at slot 16 moves to slot 15 and crosses above the Mendoza Line. Want to know which initiative that is and what it means?"
+```
+
+---
+
+## REMOVAL SCENARIOS
+
+### Scenario 1: Simple Removal (No Mendoza Crossing)
+
+**User**: "What if we cancel API Gateway v3?"
+
+**Current State**: API Gateway v3 at slot 6 (Row 3)
+
+**Analysis**:
+```
+"Canceling API Gateway v3 frees up Backend Platform and Security Engineering teams - about 35% combined capacity. Everything from slot 7 down shifts up by 1, so the initiative at slot 7 becomes slot 6, slot 8 becomes slot 7, etc. No Mendoza Line crossings happen since API Gateway was above the line. Those teams could be reallocated to Data Lake v2 or other high-priority work. Want suggestions on where to use that freed capacity?"
+```
+
+### Scenario 2: Removal Causes Mendoza Crossing
+
+**User**: "What if we shelve Integration Hub?"
+
+**Current State**: Integration Hub at slot 15 (Row 5)
+
+**Analysis**:
+```
+"Shelving Integration Hub frees Integration Services and API Platform - about 40% capacity. Everything below it shifts up, so whatever's at slot 16 moves to slot 15 and crosses above the Mendoza Line. Let me check which initiative that is... 
+
+[After checking data]
+
+That would be Data Lake v2 moving from slot 16 to slot 15 - it crosses above the line and becomes active deliverable work. But Data Lake v2 is not-validated, which is risky for above-line work. You'd want to validate it first or use that freed capacity differently. Want to explore alternatives?"
+```
+
+### Scenario 3: Multiple Removals
+
+**User**: "What if we cancel both Integration Hub and API Gateway v3?"
+
+**Analysis**:
+```
+"Canceling both frees up 4 teams total with about 70% combined capacity - that's significant. Here's what happens to the board:
+
+First removal (API Gateway at slot 6): Everything from slot 7+ shifts up by 1
+Second removal (Integration Hub, now at slot 14 after first shift): Everything from slot 15+ shifts up by 1
+
+Net result: Two initiatives that were below the Mendoza Line move above it. The board compresses and you have major capacity to reallocate. This is basically a portfolio reset. Want me to identify which below-line initiatives would become active?"
+```
+
+---
+
+## CAPACITY FREED CALCULATIONS
+
+When initiative removed, freed capacity = sum of team capacities assigned to it
+
+**Example**:
+```
+Integration Hub teams:
+- Integration Services: 50 points capacity, 82% utilized = 41 points in use
+- API Platform: 45 points capacity, 76% utilized = 34 points in use
+
+Freed capacity: 75 points total (41 + 34)
+Available for reallocation: 75 points
+```
+
+---
+
+## REALLOCATION OPPORTUNITIES
+
+After removal, AI should suggest:
+
+1. **High-risk initiatives that need help**
+   - Calculate which initiatives have highest risk scores
+   - Identify if freed teams could reduce risk
+   - Show projected risk score improvement
+
+2. **Below-line initiatives ready to activate**
+   - Check validation status
+   - Verify freed capacity sufficient
+   - Recommend best candidates
+
+3. **Overloaded teams that need relief**
+   - Identify teams >90% utilization
+   - Calculate if freed capacity could help
+   - Suggest specific reassignments
+
+**Example Response**:
+```
+"With 75 points freed from removing Integration Hub, here are three ways to use it:
+
+1. Reduce risk on Data Lake v2: Add API Platform team, drops risk score from 117 to 85
+2. Activate Mobile App from pipeline: Needs 80 points, you have 75 - close, might work with scope reduction
+3. Help overloaded Backend Platform: They're at 103% utilization, adding Integration Services gets them to healthy 88%
+
+Which direction interests you?"
+```
+
+---
+
+## REMOVAL VALIDATION CHECKLIST
+
+Before analyzing removal:
+1. ✅ Verify initiative exists in active board
+2. ✅ Confirm current slot and row
+3. ✅ Identify all teams assigned
+4. ✅ Calculate total freed capacity
+5. ✅ Check if slot 16 exists (Mendoza crossing potential)
+6. ✅ Identify reallocation opportunities
+
+After removal analysis:
+1. ✅ Show upward cascade (not downward)
+2. ✅ Highlight Mendoza crossings if any
+3. ✅ Calculate freed capacity
+4. ✅ List affected teams
+5. ✅ Suggest reallocation options
+6. ✅ Note strategic implications
+
+---
+
+## CRITICAL REMINDERS
+
+1. **Removal shifts initiatives UP, not down** (opposite of adding)
+2. **Gap-filling is automatic** - no empty slots remain
+3. **Mendoza crossings from below→above are POSITIVE** (work becomes deliverable)
+4. **Always calculate freed capacity** from removed initiative
+5. **Suggest reallocation options** - don't just analyze, guide next steps
+6. **Verify initiative exists** before analyzing removal
+7. **Recognize ALL removal synonyms** from the complete list above
