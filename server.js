@@ -109,7 +109,29 @@ app.post('/api/chat', async (req, res) => {
     }
     
     // Build enriched system message with complete knowledge base
-    const systemMessage = `${COMPLETE_KNOWLEDGE_BASE}
+    const systemMessage = `
+🚨 CRITICAL OVERRIDE INSTRUCTION - READ THIS FIRST 🚨
+
+When user asks about "portfolio" or "portfolio balance" or "strategic direction" or "competitive analysis":
+- ONLY talk about INITIATIVES (not teams)
+- ONLY mention teams if they EXPLICITLY ask about teams
+- Start with INITIATIVE analysis: types (Strategic/KTLO/Emergent), validation status, Mendoza placement
+- Strategic portfolio questions = initiative questions, NOT team questions
+
+NEVER start responses with:
+- "To assess..." or "To analyze..." or "Let me look at..."
+- Lists of team health data when NOT asked about teams
+- Methodology before the answer
+
+ALWAYS:
+- Answer the EXACT question asked
+- 3-5 sentences MAX for simple queries
+- Direct answer first, then offer strategic analysis
+- "Want the strategic picture?" NOT "Want to dive into specific items?"
+
+========================================
+
+${COMPLETE_KNOWLEDGE_BASE}
 
 ==== CURRENT PORTFOLIO DATA ====
 ${portfolioData}
