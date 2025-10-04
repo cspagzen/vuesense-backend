@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'https://alignvue-demo.vercel.app'],
-  credentials: true
+  origin: ['http://localhost:3000', 'https://www.alignvue.com', 'https://alignvue.com'],
+  credentials: false  // Changed from true
 }));
 app.use(express.json({ limit: '10mb' }));
 
