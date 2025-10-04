@@ -1,0 +1,165 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww23960\viewh16660\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # VOLUME 6: WHAT-IF SCENARIO ANALYSIS FRAMEWORK\
+\
+## CRITICAL UNDERSTANDING: PORTFOLIO GRID MECHANICS\
+\
+### Grid Structure\
+**Pyramid Layout**: Row count increases with priority\
+- Row 1: 1 slot (slot 1)\
+- Row 2: 2 slots (slots 2-3)\
+- Row 3: 3 slots (slots 4-6)\
+- Row 4: 4 slots (slots 7-10)\
+- Row 5: 5 slots (slots 11-15)\
+- Row 6: 6 slots (slots 16-21)\
+- Row 7: 7 slots (slots 22-28)\
+- Row 8: 8 slots (slots 29-36)\
+\
+**Priority Flow**: RIGHT to LEFT, BOTTOM to TOP\
+- Lower slot number = HIGHER priority\
+- Slot 1 is the HIGHEST priority initiative\
+- Within each row: rightmost position = highest priority in that row\
+\
+**Terminology Synonyms**:\
+- "Row" = "Line" (users may say either)\
+- "Slot" = "Position" = "Priority number"\
+- "Moving up a row" = "Moving to a lower row number" = "Increasing priority"\
+- "Moving down a row" = "Moving to a higher row number" = "Decreasing priority"\
+\
+### The Mendoza Line\
+**Location**: Between Row 5 and Row 6 (between slots 15 and 16)\
+\
+**Above the Line** (Slots 1-15, Rows 1-5):\
+- HIGH delivery confidence\
+- Active, deliverable work\
+- Full resource allocation\
+- Teams focused on these initiatives\
+- Expensive work HERE is GOOD (high ROI)\
+- Discovery work HERE gets partial credit (validate before scaling)\
+\
+**Below the Line** (Slots 16+, Rows 6-8):\
+- LOW delivery confidence\
+- Backlog/future work\
+- Limited or no resource allocation\
+- Should NOT be actively worked\
+- Expensive work HERE is WASTE (burning resources on non-deliverables)\
+- Discovery work HERE is IDEAL (validate before committing expensive resources)\
+\
+---\
+\
+## CASCADING LOGIC: HOW MOVES RIPPLE THROUGH THE PORTFOLIO\
+\
+### Core Mechanic\
+When ANY initiative moves to a new slot, ALL initiatives in slots below the target position shift DOWN by 1 slot.\
+\
+**Example**: Moving initiative from slot 16 \uc0\u8594  slot 6\
+- Initiative currently at slot 6 \uc0\u8594  moves to slot 7\
+- Initiative currently at slot 7 \uc0\u8594  moves to slot 8\
+- Initiative currently at slot 8 \uc0\u8594  moves to slot 9\
+- ... continues ALL the way down ...\
+- Initiative currently at slot 15 \uc0\u8594  moves to slot 16 (CROSSES MENDOZA LINE!)\
+- Initiative originally at slot 16 (our moved item) \uc0\u8594  now at slot 6\
+\
+### Row Calculation from Slot\
+```\
+Row = ceil((-1 + sqrt(1 + 8 \'d7 slot)) / 2)\
+```\
+\
+**Examples**:\
+- Slot 1 \uc0\u8594  Row 1\
+- Slot 6 \uc0\u8594  Row 3\
+- Slot 15 \uc0\u8594  Row 5 (last slot above Mendoza Line)\
+- Slot 16 \uc0\u8594  Row 6 (first slot below Mendoza Line)\
+\
+---\
+\
+## IDENTIFYING "RELEVANT" INITIATIVES\
+\
+When reporting on a move's impact, ONLY report initiatives that meet these criteria:\
+\
+### 1. **Directly Displaced Initiative**\
+The initiative currently sitting in the target slot\
+- **Example**: Moving something to slot 6 affects the init currently at slot 6\
+\
+### 2. **Row Change Initiatives**\
+Any initiative that moves to a DIFFERENT row number\
+- **Example**: Slot 6 \uc0\u8594  Slot 7 (Row 3 \u8594  Row 4) = RELEVANT\
+- **Example**: Slot 11 \uc0\u8594  Slot 12 (Row 5 \u8594  Row 5) = NOT relevant (same row)\
+\
+### 3. **Mendoza Line Crossings**\
+Any initiative that crosses from above\uc0\u8594 below or below\u8594 above\
+- **Example**: Slot 15 \uc0\u8594  Slot 16 (crosses from Row 5 to Row 6) = CRITICAL\
+- **Example**: Slot 16 \uc0\u8594  Slot 15 (crosses from Row 6 to Row 5) = CRITICAL\
+\
+**Why this matters**: These three categories represent SIGNIFICANT priority shifts that impact:\
+- Team focus and resource allocation\
+- Delivery confidence expectations\
+- Risk score calculations\
+- Strategic vs operational balance\
+\
+---\
+\
+## REPORTING FORMAT FOR WHAT-IF SCENARIOS\
+\
+For EVERY relevant initiative affected by a move, report:\
+1. **Initiative name**\
+2. **OLD slot AND row** (e.g., "slot 15, Row 5")\
+3. **NEW slot AND row** (e.g., "slot 16, Row 6")\
+4. **Mendoza crossing status** (if applicable)\
+5. **Teams assigned** (who is impacted)\
+\
+**CORRECT Example**:\
+"API Gateway v3 moves from slot 6 (Row 3) \uc0\u8594  slot 7 (Row 4)"\
+\
+**INCORRECT Example** (missing row info):\
+"API Gateway v3 moves from slot 6 to slot 7"\
+\
+---\
+\
+## RESPONSE QUALITY CHECKLIST FOR WHAT-IF SCENARIOS\
+\
+Every what-if analysis MUST include:\
+\
+\uc0\u9989  **Current State**:\
+- Initiative's current slot and row\
+- Current teams assigned\
+- Current risk score\
+- Current efficiency/confidence scores\
+\
+\uc0\u9989  **Proposed Change**:\
+- Target slot and row\
+- Direction of movement (up/down, above/below line)\
+\
+\uc0\u9989  **Relevant Initiatives Affected**:\
+- ONLY report: directly displaced, row changes, Mendoza crossings\
+- For each: old slot/row \uc0\u8594  new slot/row\
+- Note Mendoza crossings prominently\
+\
+\uc0\u9989  **Team Impacts**:\
+- Teams gaining/losing work\
+- Utilization changes\
+- Capacity freed/consumed\
+- Over-utilization risks\
+\
+\uc0\u9989  **Recalculated Metrics**:\
+- New risk scores (show calculation)\
+- New efficiency score\
+- New delivery confidence\
+- Explain why scores changed\
+\
+\uc0\u9989  **Strategic Implications**:\
+- OKR alignment impact\
+- Strategic vs KTLO balance\
+- Validation status concerns\
+- Resource optimization opportunities\
+\
+\uc0\u9989  **Actionable Recommendations**:\
+- Should we make this move?\
+- What else should we consider?\
+- What mitigations are needed?\
+- Alternative options to explore}

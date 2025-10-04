@@ -1,6 +1,6 @@
 /**
  * VueSense Backend Server - Production Version
- * Handles AI chat with complete knowledge base
+ * Handles AI chat with complete 7-volume knowledge base
  */
 
 const express = require('express');
@@ -13,10 +13,10 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Middleware - UPDATED CORS
 app.use(cors({
   origin: ['http://localhost:3000', 'https://www.alignvue.com', 'https://alignvue.com'],
-  credentials: false  // Changed from true
+  credentials: false
 }));
 app.use(express.json({ limit: '10mb' }));
 
@@ -30,18 +30,20 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Load Complete Knowledge Base
+// Load Complete Knowledge Base - NOW WITH 7 VOLUMES
 let COMPLETE_KNOWLEDGE_BASE = '';
 try {
-  // Load all 5 volumes from files
+  // Load all 7 volumes from files
   const vol1 = fs.readFileSync(path.join(__dirname, 'kb-vol1-core.txt'), 'utf8');
   const vol2 = fs.readFileSync(path.join(__dirname, 'kb-vol2-strategic.txt'), 'utf8');
   const vol3 = fs.readFileSync(path.join(__dirname, 'kb-vol3-analysis.txt'), 'utf8');
   const vol4 = fs.readFileSync(path.join(__dirname, 'kb-vol4-reference.txt'), 'utf8');
   const vol5 = fs.readFileSync(path.join(__dirname, 'kb-vol5-userguide.txt'), 'utf8');
+  const vol6 = fs.readFileSync(path.join(__dirname, 'kb-vol6-whatif.txt'), 'utf8');
+  const vol7 = fs.readFileSync(path.join(__dirname, 'kb-vol7-prompts.txt'), 'utf8');
   
   COMPLETE_KNOWLEDGE_BASE = `
-# VUESENSE AI - COMPLETE KNOWLEDGE BASE
+# VUESENSE AI - COMPLETE KNOWLEDGE BASE (7 VOLUMES)
 
 ${vol1}
 
@@ -52,10 +54,15 @@ ${vol3}
 ${vol4}
 
 ${vol5}
+
+${vol6}
+
+${vol7}
 `;
   
-  console.log('✅ Knowledge Base loaded successfully');
+  console.log('✅ Knowledge Base loaded successfully (7 volumes)');
   console.log(`📚 Total KB size: ${(COMPLETE_KNOWLEDGE_BASE.length / 1024).toFixed(2)} KB`);
+  console.log(`📖 Volumes loaded: Core, Strategic, Analysis, Reference, User Guide, What-If, Prompts`);
 } catch (error) {
   console.error('ERROR loading knowledge base:', error);
   // Fallback to minimal KB if files not found
@@ -71,7 +78,9 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     message: 'VueSense AI Backend is running',
     timestamp: new Date().toISOString(),
-    kbLoaded: COMPLETE_KNOWLEDGE_BASE.length > 1000
+    kbLoaded: COMPLETE_KNOWLEDGE_BASE.length > 1000,
+    kbSize: `${(COMPLETE_KNOWLEDGE_BASE.length / 1024).toFixed(2)} KB`,
+    volumes: 7
   });
 });
 
@@ -90,8 +99,7 @@ app.post('/api/chat', async (req, res) => {
     let portfolioData = '';
     const systemMessageFromFrontend = messages.find(m => m.role === 'system');
     if (systemMessageFromFrontend && systemMessageFromFrontend.content.includes('CURRENT PORTFOLIO DATA:')) {
-      // Extract the JSON data portion
-      const dataMatch = systemMessageFromFrontend.content.match(/CURRENT PORTFOLIO DATA:([\s\S]*?)$/);
+      const dataMatch = systemMessageFromFrontend.content.match(/CURRENT PORTFOLIO DATA:([\s\S]*)$/);
       if (dataMatch) {
         portfolioData = dataMatch[1].trim();
       }
@@ -104,27 +112,33 @@ app.post('/api/chat', async (req, res) => {
 ${portfolioData}
 
 ==== CRITICAL INSTRUCTIONS ====
-1. You have access to the COMPLETE knowledge base above - use ALL of it
+1. You have access to the COMPLETE 7-volume knowledge base above - use ALL of it
 2. Apply EXACT formulas from Volume 1 for calculations
 3. Use frameworks from Volume 2 for strategic questions
 4. Apply patterns from Volume 3 for analysis
 5. Follow quality standards from Volume 4
 6. Answer "how to" questions using Volume 5
-7. ALWAYS reference specific team names and initiative names from the portfolio data
-8. NEVER give generic responses - be specific and actionable
-9. When asked about teams needing support, list SPECIFIC teams with their ACTUAL issues
-10. When asked about initiatives, show the EXACT teams working on them
+7. Use Volume 6 for ALL "What if" scenario analysis - report BOTH slot AND row changes
+8. Use Volume 7 to recognize flexible prompt variations
+9. ALWAYS reference specific team names and initiative names from the portfolio data
+10. NEVER give generic responses - be specific and actionable
+11. For "What if" scenarios: Report ONLY relevant initiatives (displaced, row changes, Mendoza crossings)
+12. For moves: Show OLD slot/row → NEW slot/row for every affected initiative
+13. Highlight Mendoza Line crossings prominently (these are CRITICAL)
+14. Recalculate risk scores, efficiency, and delivery confidence after any change
+15. Give clear recommendations, not just analysis
 
 ==== RESPONSE FORMAT ====
 For team questions: List specific teams with their health status and issues
 For initiative questions: List specific initiatives with assigned teams
 For "how to" questions: Provide step-by-step instructions from Volume 5
-For calculations: Show the exact formula and calculation steps`;
+For calculations: Show the exact formula and calculation steps
+For "What if" scenarios: Use Volume 6 framework - report slot AND row changes for ALL relevant initiatives`;
     
     // Build messages for OpenAI
     const openaiMessages = [
       { role: 'system', content: systemMessage },
-      ...messages.filter(m => m.role !== 'system') // Remove original system message
+      ...messages.filter(m => m.role !== 'system')
     ];
     
     // Call OpenAI
@@ -134,7 +148,7 @@ For calculations: Show the exact formula and calculation steps`;
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
       messages: openaiMessages,
       temperature: parseFloat(process.env.TEMPERATURE) || 0.3,
-      max_tokens: parseInt(process.env.MAX_TOKENS) || 1500,
+      max_tokens: parseInt(process.env.MAX_TOKENS) || 2000,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0
@@ -189,7 +203,7 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 VueSense Backend running on port ${PORT}`);
-  console.log(`📚 Knowledge Base: ${COMPLETE_KNOWLEDGE_BASE.length > 1000 ? 'Loaded' : 'Using fallback'}`);
+  console.log(`📚 Knowledge Base: ${COMPLETE_KNOWLEDGE_BASE.length > 1000 ? 'Loaded (7 volumes)' : 'Using fallback'}`);
   console.log(`🔑 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Configured' : 'MISSING!'}`);
   console.log(`🤖 Model: ${process.env.OPENAI_MODEL || 'gpt-4o-mini'}`);
 });

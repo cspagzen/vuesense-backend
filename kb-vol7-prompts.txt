@@ -1,0 +1,342 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # VOLUME 7: WHAT-IF PROMPT RECOGNITION PATTERNS\
+\
+## CRITICAL: FLEXIBLE LANGUAGE UNDERSTANDING\
+\
+Users will NEVER use the exact same phrasing. The AI must recognize intent from different terminology, casual vs formal language, and implicit vs explicit requests.\
+\
+## TERMINOLOGY TRANSLATION TABLE\
+\
+Users may use different terms. AI must recognize ALL variations:\
+\
+| User Says | AI Understands As |\
+|-----------|-------------------|\
+| "row 3", "line 3", "third row", "third line" | Row 3 (slots 4-6) |\
+| "slot 6", "position 6", "priority 6", "spot 6" | Slot 6 |\
+| "above the line", "above Mendoza", "in delivery range", "active work" | Slots 1-15, Rows 1-5 |\
+| "below the line", "below Mendoza", "backlog", "future work" | Slots 16+, Rows 6-8 |\
+| "move up", "promote", "higher priority", "bump up" | Decrease slot number |\
+| "move down", "demote", "lower priority", "bump down" | Increase slot number |\
+| "top 10", "first 10", "highest 10" | Slots 1-10 |\
+| "pipeline", "backlog", "bullpen", "queue", "waiting" | Inactive initiatives |\
+| "board", "active", "live", "in-flight", "current" | Active initiatives |\
+| "teams", "resources", "people", "capacity", "engineering" | Teams |\
+\
+---\
+\
+## PATTERN TYPE 1: BOARD \uc0\u8594  BOARD MOVES\
+\
+**Intent**: Moving existing initiative to different priority\
+\
+**Recognition Keywords**:\
+- Move, shift, bump, promote, demote, reprioritize, change priority, reorder\
+- "What if", "what happens", "what would happen", "implications"\
+- "to row/line/slot/position/priority X"\
+- "higher/lower", "up/down", "top/bottom"\
+\
+**Example Variations**:\
+\
+\uc0\u9989  Direct and explicit:\
+- "What if we move Data Lake v2 to row 3?"\
+- "Move Data Lake v2 to line 3"\
+- "What are the portfolio implications if I move Data Lake v2 to line 3?"\
+\
+\uc0\u9989  Casual and conversational:\
+- "What happens if Data Lake moves up to row 3?"\
+- "If we bump Data Lake to line 3, what changes?"\
+- "Data Lake to row 3, what does that do?"\
+\
+\uc0\u9989  Priority-focused:\
+- "What if Data Lake v2 becomes priority 6?"\
+- "Move Data Lake to slot 6"\
+- "Reprioritize Data Lake to position 6"\
+\
+\uc0\u9989  Relative positioning:\
+- "What if Data Lake moves above the Mendoza line?"\
+- "Promote Data Lake to above the line"\
+- "What if we make Data Lake top 10?"\
+- "Bump Data Lake higher in priority"\
+\
+\uc0\u9989  Implied movement:\
+- "Data Lake in row 3?" (question form implies "what if")\
+- "Should we prioritize Data Lake higher?"\
+- "Is Data Lake more important than slot 6 work?"\
+\
+**Disambiguation Questions** (if intent unclear):\
+- "Which specific slot in Row 3 did you mean? (4, 5, or 6)"\
+- "Do you mean move it to Row 3 or slot 3?"\
+- "Higher or lower priority?"\
+\
+---\
+\
+## PATTERN TYPE 2: PIPELINE \uc0\u8594  BOARD ACTIVATION\
+\
+**Intent**: Moving inactive (pipeline) initiative to active board\
+\
+**Recognition Keywords**:\
+- Activate, start, begin, add to board, pull from pipeline, move to active\
+- "from pipeline", "from backlog", "from bullpen"\
+- "start working on", "begin development", "kick off"\
+\
+**Example Variations**:\
+\
+\uc0\u9989  Direct activation:\
+- "What if we activate Mobile App Redesign?"\
+- "Add Mobile App Redesign to the board"\
+- "Move Mobile App from pipeline to row 4"\
+\
+\uc0\u9989  Start-focused:\
+- "What happens if we start working on Mobile App?"\
+- "If we begin Mobile App Redesign, what's the impact?"\
+- "Should we kick off Mobile App next quarter?"\
+\
+\uc0\u9989  Resource-focused:\
+- "What if we commit teams to Mobile App Redesign?"\
+- "If we resource Mobile App, what changes?"\
+- "Can we add Mobile App without breaking capacity?"\
+\
+\uc0\u9989  Strategic questions:\
+- "Is there room for Mobile App Redesign on the board?"\
+- "What would it take to activate Mobile App?"\
+- "When can we start Mobile App?"\
+\
+---\
+\
+## PATTERN TYPE 3: BOARD \uc0\u8594  PIPELINE DEPRIORITIZATION\
+\
+**Intent**: Moving active initiative to inactive pipeline\
+\
+**Recognition Keywords**:\
+- Deprioritize, shelve, pause, defer, move to pipeline, remove from board\
+- "stop working on", "free up capacity", "what does that free"\
+- "take off the board", "move to backlog"\
+\
+**Example Variations**:\
+\
+\uc0\u9989  Direct deprioritization:\
+- "What if we shelve Integration Hub?"\
+- "Move Integration Hub to pipeline"\
+- "Deprioritize Integration Hub"\
+\
+\uc0\u9989  Pause-focused:\
+- "What happens if we pause Integration Hub?"\
+- "If we stop working on Integration Hub?"\
+- "What if Integration Hub goes on hold?"\
+\
+\uc0\u9989  Capacity-focused:\
+- "What frees up if we remove Integration Hub?"\
+- "If we deprioritize Integration Hub, what capacity is available?"\
+- "What teams would be freed if Integration Hub stops?"\
+\
+\uc0\u9989  Strategic questions:\
+- "Can we afford to shelve Integration Hub?"\
+- "What's the impact of pausing Integration Hub?"\
+- "Should we defer Integration Hub to Q3?"\
+\
+---\
+\
+## PATTERN TYPE 4: TEAM REASSIGNMENT\
+\
+**Intent**: Moving a team from one initiative to another\
+\
+**Recognition Keywords**:\
+- Move team, reassign, switch teams, reallocate, pull team off, add team to\
+- "from [Initiative A] to [Initiative B]"\
+- "stop working on X, start on Y"\
+\
+**Example Variations**:\
+\
+\uc0\u9989  Direct reassignment:\
+- "What if we move Backend Platform from Integration Hub to Data Lake v2?"\
+- "Reassign Backend Platform to Data Lake v2"\
+- "Move Backend team off Integration Hub onto Data Lake"\
+\
+\uc0\u9989  Pull-focused:\
+- "What happens if Backend Platform stops working on Integration Hub?"\
+- "Pull Backend team from Integration Hub"\
+- "If Backend Platform leaves Integration Hub?"\
+\
+\uc0\u9989  Add-focused:\
+- "What if we add Backend Platform to Data Lake v2?"\
+- "Give Backend team to Data Lake v2"\
+- "Put Backend Platform on Data Lake instead"\
+\
+\uc0\u9989  Swap-focused:\
+- "Swap Backend Platform and API Platform"\
+- "Switch Backend and API teams"\
+- "What if Backend and API swap initiatives?"\
+\
+\uc0\u9989  Optimization-focused:\
+- "Which team should we move to Data Lake v2?"\
+- "Can we reallocate teams to improve Data Lake v2 risk?"\
+- "Who should we pull to help with Data Lake?"\
+\
+---\
+\
+## PATTERN TYPE 5: FUTURE COMPLETION\
+\
+**Intent**: Analyzing impact of completing an initiative\
+\
+**Recognition Keywords**:\
+- Completes, finishes, ships, delivers, done, wraps up\
+- "by [date]", "next month", "Q2", "in 6 weeks"\
+- "what frees up", "then what", "what's next"\
+\
+**Example Variations**:\
+\
+\uc0\u9989  Completion-focused:\
+- "What if Data Lake v2 completes by March?"\
+- "When Data Lake v2 is done, what can we do?"\
+- "If we finish Data Lake v2 next quarter?"\
+\
+\uc0\u9989  Capacity-focused:\
+- "What frees up when Data Lake v2 ships?"\
+- "What capacity is available after Data Lake v2?"\
+- "If Data Lake finishes early, then what?"\
+\
+\uc0\u9989  Planning-focused:\
+- "What should we do after Data Lake v2?"\
+- "What's next after we complete Data Lake v2?"\
+- "When Data Lake wraps, what's the next priority?"\
+\
+\uc0\u9989  Timeline-focused:\
+- "If Data Lake v2 delivers in Q2, what changes?"\
+- "When can we start the next initiative after Data Lake?"\
+- "Data Lake done by June, what's our capacity?"\
+\
+---\
+\
+## PATTERN TYPE 6: REMOVAL/CANCELLATION\
+\
+**Intent**: Completely removing an initiative (not moving to pipeline)\
+\
+**Recognition Keywords**:\
+- Cancel, kill, remove, delete, abandon, discontinue, eliminate\
+- "completely remove", "take off entirely", "stop permanently"\
+\
+**Example Variations**:\
+\
+\uc0\u9989  Direct removal:\
+- "What if we cancel Integration Hub?"\
+- "Remove Integration Hub completely"\
+- "Kill the Integration Hub project"\
+\
+\uc0\u9989  Decision-focused:\
+- "Should we discontinue Integration Hub?"\
+- "What happens if we abandon Integration Hub?"\
+- "If we stop Integration Hub permanently?"\
+\
+\uc0\u9989  Resource-focused:\
+- "What capacity frees up if we eliminate Integration Hub?"\
+- "If Integration Hub goes away, what changes?"\
+- "Remove Integration Hub, what can we do instead?"\
+\
+---\
+\
+## PATTERN TYPE 7: MULTIPLE CHANGES\
+\
+**Intent**: Compound scenarios with multiple moves\
+\
+**Recognition Keywords**:\
+- "and then", "also", "plus", "combined with"\
+- Multiple initiative names mentioned\
+- Multiple actions in one query\
+\
+**Example Variations**:\
+\
+\uc0\u9989  Sequential changes:\
+- "What if we move Data Lake to row 3 AND add Backend Platform to it?"\
+- "Move Data Lake up and reassign API team to it"\
+- "Promote Data Lake and deprioritize Integration Hub"\
+\
+\uc0\u9989  Conditional changes:\
+- "If we shelve Integration Hub, can we activate Mobile App?"\
+- "If Data Lake completes, should we start Mobile App or promote Feature X?"\
+\
+\uc0\u9989  Optimization scenarios:\
+- "What's the best way to reduce risk on Data Lake v2?"\
+- "How can we get Mobile App on the board without breaking capacity?"\
+- "Optimize the portfolio for Q2 delivery"\
+\
+**AI Response Strategy**:\
+1. Break down into individual moves\
+2. Analyze each move's impact\
+3. Show combined/cumulative effect\
+4. Note any conflicts or dependencies between changes\
+\
+---\
+\
+## DISAMBIGUATION STRATEGIES\
+\
+When user query is ambiguous, ask clarifying questions:\
+\
+### Ambiguity Type 1: Row vs Slot Confusion\
+**User**: "Move Data Lake to 3"\
+**AI Asks**: "Do you mean Row 3 (slots 4-6) or slot 3 (Row 2)?"\
+\
+### Ambiguity Type 2: Unclear Target Position in Row\
+**User**: "Move Data Lake to row 3"\
+**AI Response**: "Row 3 has three slots (4, 5, 6). I'll assume you mean slot 6 (highest priority in that row) unless you specify otherwise."\
+\
+### Ambiguity Type 3: Multiple Initiatives with Similar Names\
+**User**: "Move the Data initiative higher"\
+**AI Asks**: "I see 'Data Lake v2' and 'Data Platform Upgrade'. Which one did you mean?"\
+\
+### Ambiguity Type 4: Unclear Team Reference\
+**User**: "Move the backend team to Data Lake"\
+**AI Asks**: "I see 'Backend Platform' and 'Backend Services'. Which team did you mean?"\
+\
+### Ambiguity Type 5: Timeframe Unclear\
+**User**: "What if Data Lake completes soon?"\
+**AI Asks**: "What timeline are you considering? Next month? Next quarter? This helps me calculate capacity planning."\
+\
+---\
+\
+## CONTEXT CLUES FOR INTENT RECOGNITION\
+\
+### Clue 1: Question vs Statement\
+- **Question form** ("What if...?", "What happens...?") \uc0\u8594  Analysis request\
+- **Statement form** ("Move Data Lake to row 3") \uc0\u8594  Implies "analyze this move"\
+\
+### Clue 2: Tense Usage\
+- **Conditional tense** ("would", "could", "might") \uc0\u8594  Hypothetical analysis\
+- **Future tense** ("will", "when", "after") \uc0\u8594  Planning scenario\
+- **Present tense** ("move", "change", "add") \uc0\u8594  Immediate consideration\
+\
+### Clue 3: Focus Keywords\
+- **"What frees up"**, **"capacity"**, **"available"** \uc0\u8594  Emphasize team/resource impact\
+- **"Risk"**, **"impact"**, **"implications"** \uc0\u8594  Emphasize risk calculation\
+- **"Should we"**, **"is it worth"**, **"good idea"** \uc0\u8594  Require recommendation\
+- **"How"**, **"what's the best way"** \uc0\u8594  Optimization request, may need options\
+\
+### Clue 4: Urgency Indicators\
+- **"Should we"**, **"need to decide"** \uc0\u8594  Requires clear recommendation\
+- **"Just curious"**, **"wondering"** \uc0\u8594  Informational, less pressure\
+- **"ASAP"**, **"urgently"**, **"critical"** \uc0\u8594  Highlight time-sensitive impacts\
+\
+---\
+\
+## CRITICAL RESPONSE RULES\
+\
+1. **Always report BOTH slot AND row changes**: "slot 15 (Row 5) \uc0\u8594  slot 16 (Row 6)"\
+2. **Only report RELEVANT initiatives**: Directly displaced, row changes, Mendoza crossings\
+3. **Highlight Mendoza crossings prominently**: Use \uc0\u9888 \u65039  or \u55357 \u57000  for crossing the line\
+4. **Calculate ALL metric changes**: Risk scores, efficiency, delivery confidence\
+5. **Give actionable recommendations**: Don't just analyze, guide decisions\
+6. **Show your work**: Explain WHY metrics changed\
+7. **Match user's tone**: Casual query = casual response, formal query = detailed analysis\
+8. **Default to slot 6 when user says "row 3"**: Assume rightmost (highest priority) position\
+9. **Never make up data**: Only reference initiatives and teams that exist in the portfolio\
+10. **Use specific names**: Never say "some teams" or "several initiatives"\
+\
+---\
+\
+## VOLUME 7 COMPLETE\
+\
+This volume provides flexible prompt recognition patterns for what-if scenarios. Use Volume 6 for the actual analysis framework and calculations.}
