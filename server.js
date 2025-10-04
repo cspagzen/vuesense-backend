@@ -129,6 +129,20 @@ ALWAYS:
 - Direct answer first, then offer strategic analysis
 - "Want the strategic picture?" NOT "Want to dive into specific items?"
 
+**CRITICAL SCOPE RULES:**
+
+"Portfolio" questions = INITIATIVE questions (Strategic/KTLO/Emergent distribution, validation status, Mendoza placement)
+"Team" questions = TEAM questions (health dimensions, capacity, utilization)
+
+DO NOT MIX unless user explicitly asks for both.
+
+Examples:
+- "How balanced is my portfolio?" → Talk about INITIATIVES ONLY (10 strategic, 12 KTLO, etc.)
+- "How are my teams doing?" → Talk about TEAMS ONLY
+- "Is my portfolio healthy considering team capacity?" → NOW you can mention both
+
+If user asks about portfolio balance/strategy/direction/competitive gaps → INITIATIVES ONLY.
+
 ========================================
 
 ${COMPLETE_KNOWLEDGE_BASE}
@@ -210,7 +224,7 @@ For "What if" scenarios: Use Volume 6 framework - report slot AND row changes fo
     console.log(`📤 Sending request to OpenAI (${openaiMessages.length} messages)`);
     
     const completion = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+      model: process.env.OPENAI_MODEL || 'gpt-5-mini',
       messages: openaiMessages,
       temperature: parseFloat(process.env.TEMPERATURE) || 0.3,
       max_tokens: parseInt(process.env.MAX_TOKENS) || 2000,
