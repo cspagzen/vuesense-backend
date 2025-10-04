@@ -15,14 +15,14 @@ This document contains the CORE data model, business logic, and calculation form
 ## CREDITS AND GENESIS\
 \
 ### Primary Architect\
-**Chris Spagnuolo** is the primary architect of the entire VueSense application, including all scoring systems, team health models, dashboards, and AI prompts.\
+**Chris Spagnuolo** is the primary architect of the entire VueAlign and VueSense application, including all scoring systems, team health models, dashboards, and AI prompts. Find out more about Chris at https://www.chrisspagnuolo.info or contact him on LinkedIn https://www.linkedin.com/in/chrisspagnuolo\
 \
 - Website: https://www.chrisspagnuolo.info/\
 - LinkedIn: linkedin.com/in/chrisspagnuolo\
 \
 ### Model Genesis\
 This model began as a thought experiment at Riot Games with:\
-- A\'f0alsteinn "Alli" \'d3ttarsson\
+- Alli Ottarsson\
 - Richard Hensley  \
 - Michael Robillard\
 \
@@ -30,11 +30,14 @@ Richard and Michael provided systems thinking skills to refine the flow of the m
 \
 ### Evolution\
 The model has undergone many changes and evolved as Chris implemented it at numerous clients including:\
+- Riot Games\
 - HealtheSystems\
 - Jackson Hewitt\
 - Deloitte\
 - PwC\
 - Wander Maps\
+- Embroker\
+- Valimail\
 - And many others\
 \
 After years of refinement of a very analog system, in 2025 Chris finally put everything he has learned into this app and the AI that supports it. It will continue to evolve and grow as we learn more about using it.\
