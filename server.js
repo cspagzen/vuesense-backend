@@ -33,34 +33,19 @@ const openai = new OpenAI({
 // Load Complete Knowledge Base - NOW WITH 8 VOLUMES
 let COMPLETE_KNOWLEDGE_BASE = '';
 try {
-  // Load all 8 volumes from files
-  const vol1 = fs.readFileSync(path.join(__dirname, 'kb-vol1-core.txt'), 'utf8');
-  const vol2 = fs.readFileSync(path.join(__dirname, 'kb-vol2-strategic.txt'), 'utf8');
-  const vol3 = fs.readFileSync(path.join(__dirname, 'kb-vol3-analysis.txt'), 'utf8');
-  const vol4 = fs.readFileSync(path.join(__dirname, 'kb-vol4-reference.txt'), 'utf8');
-  const vol5 = fs.readFileSync(path.join(__dirname, 'kb-vol5-userguide.txt'), 'utf8');
-  const vol6 = fs.readFileSync(path.join(__dirname, 'kb-vol6-whatif.txt'), 'utf8');
-  const vol7 = fs.readFileSync(path.join(__dirname, 'kb-vol7-prompts.txt'), 'utf8');
-  const vol8 = fs.readFileSync(path.join(__dirname, 'kb-vol8-horizons.txt'), 'utf8');
-  
-  COMPLETE_KNOWLEDGE_BASE = `
-# VUESENSE AI - COMPLETE KNOWLEDGE BASE (8 VOLUMES)
+  // Load all 3 volumes from files
+  const vol1 = fs.readFileSync(path.join(__dirname, 'kb-vol1-core-REDUCED.txt'), 'utf8');
+const vol2 = fs.readFileSync(path.join(__dirname, 'kb-vol2-strategic-REDUCED.txt'), 'utf8');
+const vol3 = fs.readFileSync(path.join(__dirname, 'kb-vol3-4-analysis-REDUCED.txt'), 'utf8');
+
+COMPLETE_KNOWLEDGE_BASE = `
+# VUESENSE AI - REDUCED KNOWLEDGE BASE
 
 ${vol1}
 
 ${vol2}
 
 ${vol3}
-
-${vol4}
-
-${vol5}
-
-${vol6}
-
-${vol7}
-
-${vol8}
 `;
   
   console.log('✅ Knowledge Base loaded successfully (8 volumes)');
