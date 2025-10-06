@@ -1,0 +1,67 @@
+# VOLUME 2: STRATEGIC FRAMEWORKS (REDUCED)
+
+## PORTFOLIO PRIORITIZATION BASICS
+
+### Portfolio Review Goals
+
+On a regular basis, review the portfolio to:
+- Maximize portfolio value over time
+- Ensure portfolio is balanced and diversified (risk, duration, timing, technologies)
+- Consider constraints of people and expertise
+- Make best use of available resources
+- Maintain holistic view across products, services, business units
+
+---
+
+## PORTFOLIO PRIORITIZATION & VALIDATION
+
+### Validation Status System
+
+**Three Validation States**:
+
+- **not-validated** (Red dot): Assumptions untested, high risk
+  - Hypotheses about customer, problem, solution not confirmed
+  - Should NOT be above Mendoza Line (expensive waste)
+  - Exception: Discovery work below line is expected
+
+- **in-validation** (Teal dot): Currently running experiments
+  - Testing hypotheses with real customers
+  - Data collection in progress
+  - Should be below line until validated
+
+- **validated** (Green dot): All hypotheses confirmed, ready to build
+  - Customer need proven
+  - Problem/solution fit confirmed
+  - Market demand validated
+  - Safe to invest expensive resources (development)
+
+**Validation Rules**:
+- Top 3 rows (priorities 1-15) should be fully validated (green)
+- Validation reduces risk significantly
+- Discovery work below line confirms assumptions cheaply
+- Never commit expensive development resources to not-validated work
+
+---
+
+## PORTFOLIO PRIORITIZATION CADENCE
+
+**Every 2 weeks - 1 hour meeting**:
+- Attendees: All stakeholders (minimum: all VPs, Directors, Team Leads)
+- Wider audience = more valuable conversations
+
+**Pre-meeting**: 
+- Teams update health cards
+- PMs update validation status
+
+**Agenda**:
+1. Remove completed initiatives, re-adjust positions
+2. Introduce and place new initiatives at appropriate priority
+3. Re-prioritize if necessary
+4. Discuss impact of new initiatives and re-prioritization
+5. Address items below Mendoza line (do we still care?)
+6. Address and resolve red items on active team health cards
+
+---
+
+## VOLUME 2 COMPLETE
+This volume contains strategic frameworks. Core foundation is in Volume 1. Analysis methods are in Volume 3. Reference materials are in Volume 4.
