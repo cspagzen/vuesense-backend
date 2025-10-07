@@ -267,6 +267,16 @@ Efficiency = (21.4 / 28) × 100 = 76% (Good)
 
 ---
 
+# KB VOLUME 1 ADDITIONS - Copy and Paste into kb-vol1-core-REDUCED.txt
+
+**INSTRUCTIONS**: 
+1. Open your `kb-vol1-core-REDUCED.txt` file
+2. Find Section 3 (DATA ACCESS PATTERNS) around line 150-200
+3. Replace the existing Section 3 content with everything below
+4. Save the file
+
+---
+
 ## 3. DATA ACCESS PATTERNS
 
 ### 3.1 Accessing Portfolio Data
@@ -305,7 +315,301 @@ For each team in initiative.teams array, check:
 `window.boardData.teams[teamName].skillset`
 etc.
 
+### 3.3 ACCESSING TEAM COMMENTS
+
+**Location**: Team comments are stored in the Jira integration data structure.
+
+**Access Pattern**:
+```javascript
+const team = window.boardData.teams['Team Name'];
+const comments = team.jira?.comments || '';
+```
+
+**Data Source**: 
+- Comments come from Jira custom field 10263
+- Stored in ADF (Atlassian Document Format)
+- Extracted using `extractTextFromADF()` function
+- Available as plain text string in `team.jira.comments`
+
+**Pattern Detection in Comments**:
+When analyzing team issues, AI should search comments for these keywords:
+
+**Blocking Patterns**:
+- "waiting on", "blocked by", "dependency", "can't proceed"
+- Example: "waiting on API team to deliver endpoints"
+
+**Skill Gap Patterns**:
+- "need training", "skill gap", "learning curve", "missing expertise"
+- Example: "team lacks React experience for this work"
+
+**Capacity Issues**:
+- "overloaded", "no bandwidth", "stretched across", "too many initiatives"
+- Example: "stretched across 5 initiatives with no capacity"
+
+**Team Dynamics**:
+- "friction", "turnover", "morale", "conflict", "communication issues"
+- Example: "team morale low due to constant context switching"
+
+**Usage Example**:
+```javascript
+// Get all team comments for pattern analysis
+const allComments = Object.entries(window.boardData.teams)
+  .map(([name, team]) => ({
+    team: name,
+    comments: team.jira?.comments || ''
+  }))
+  .filter(t => t.comments.length > 0);
+
+// Search for blocking patterns
+const blockedTeams = allComments.filter(t => 
+  t.comments.toLowerCase().includes('waiting on') ||
+  t.comments.toLowerCase().includes('blocked by')
+);
+```
+
+### 3.4 PORTFOLIO RISK SCORE CALCULATION
+
+Risk scores are calculated for both teams and initiatives to quantify delivery risk.
+
+#### Team Portfolio Risk Score
+
+**Formula Components**:
+
+1. **Team Health Risk (Base Points)**
+   - Critical dimension: **15 pts** each
+   - At-Risk dimension: **7 pts** each
+   - Applies to all 6 health dimensions:
+     * Capacity, Skillset, Support, Vision, Team Cohesion, Autonomy
+
+2. **Health Multiplier** (affects ALL other risk)
+   - 3+ critical dimensions: **2.0x multiplier**
+   - 1+ critical OR 3+ at-risk: **1.5x multiplier**
+   - Creates compound risk when teams are severely unhealthy
+
+3. **Over-utilization Risk**
+   - **2 pts** if utilization > 95%
+
+**Example Calculation**:
+```javascript
+// Team with: Capacity Critical, Support Critical, Skillset At-Risk, 98% utilization
+Base Health = (15 + 15 + 7) = 37 pts
+Critical Count = 2 → Multiplier = 1.5x
+Utilization = 98% → +2 pts
+Total = (37 × 1.5) + 2 = 57.5 pts (HIGH RISK)
+```
+
+**Code Implementation**:
+```javascript
+function calculateTeamRiskPoints(teamName) {
+  const team = window.boardData.teams[teamName];
+  let totalRisk = 0;
+  let criticalCount = 0;
+  let atRiskCount = 0;
+  
+  // Count health dimensions
+  const dimensions = ['capacity', 'skillset', 'vision', 'support', 'teamwork', 'autonomy'];
+  dimensions.forEach(dim => {
+    const value = team[dim];
+    if (value === 'critical' || value === 'Critical') {
+      criticalCount++;
+      totalRisk += 15;
+    } else if (value === 'at-risk' || value === 'At Risk') {
+      atRiskCount++;
+      totalRisk += 7;
+    }
+  });
+  
+  // Apply health multiplier
+  let multiplier = 1.0;
+  if (criticalCount >= 3) multiplier = 2.0;
+  else if (criticalCount >= 1 || atRiskCount >= 3) multiplier = 1.5;
+  
+  totalRisk *= multiplier;
+  
+  // Add utilization risk
+  if (team.jira?.utilization > 95) {
+    totalRisk += 2;
+  }
+  
+  return Math.round(totalRisk);
+}
+```
+
+#### Initiative Risk Score
+
+**Formula**: Total = Team Health + Validation + Blockers + Focus & Load
+
+**Component Breakdown**:
+- **Team Health**: Sum of all assigned teams' health risk points
+- **Validation**: 
+  - Not validated: 2 pts per initiative
+  - In validation: 1 pt per initiative
+  - Validated: 0 pts
+- **Blockers**: Points based on percentage of flagged stories
+- **Focus & Load**: Points based on team workload distribution
+
+**Real Portfolio Example** (from user's Image 1):
+- Team Health: **30 pts** (Capacity & Support Critical on assigned teams)
+- Validation: **56 pts** (multiple unvalidated strategic initiatives)
+- Blockers: **0 pts** (no blocked stories)
+- Focus & Load: **50 pts** (high workload, many initiatives)
+- **TOTAL: 136 pts** (CRITICAL RISK)
+
+**Risk Score Interpretation**:
+- **0-7 pts**: Low Risk (Green) - Healthy, manageable
+- **8-11 pts**: Medium Risk (Yellow) - Watch closely
+- **12-15 pts**: High Risk (Orange) - Action needed soon
+- **16+ pts**: Critical Risk (Red) - Immediate action required
+
+### 3.5 AI RESPONSE PATTERNS FOR TEAM QUESTIONS
+
+When users ask about teams, AI should follow these patterns:
+
+#### Pattern 1: "What's wrong with [Team]?"
+
+**Process**:
+1. Access `window.boardData.teams['Team Name']`
+2. Identify all at-risk/critical dimensions
+3. Check utilization level
+4. Count initiatives assigned
+5. **READ COMMENTS for context** ← CRITICAL STEP
+6. Format comprehensive response
+
+**Example Response**:
+"**Core Platform** has Capacity and Support Critical, working on 4 initiatives at 98% capacity. Comments indicate: 'waiting on API team to deliver endpoints, causing 2-week delay on Data Lake work.'"
+
+#### Pattern 2: "What patterns do you see in team comments?"
+
+**Process**:
+1. Extract ALL comments from `window.boardData.teams`
+2. Tokenize and analyze for keyword frequency
+3. Group by theme (blocking, skills, capacity, dynamics)
+4. Count occurrences and identify most common patterns
+5. Reference specific teams exhibiting each pattern
+
+**Example Response**:
+"Top patterns across team comments:
+
+1. **API Dependency Bottleneck** (5 teams): Platform, Backend, Integration, Frontend, Mobile all mention 'waiting on API team'
+2. **React Skill Gaps** (3 teams): Frontend, UX, Mobile cite 'need React training' or 'missing React expertise'  
+3. **Capacity Overload** (4 teams): Core Platform, Data Eng, Security, Backend all note 'stretched too thin' or 'no bandwidth'"
+
+#### Pattern 3: "Which teams need support?"
+
+**Process**:
+1. Filter `window.boardData.teams` for ANY dimension at-risk or critical
+2. Prioritize by:
+   - Critical dimensions > At-Risk
+   - >95% utilization = urgent
+   - Working on above-line (priority 1-15) = higher impact
+3. Read comments for additional context
+4. Return ranked list with specific issues
+
+**Example Response**:
+"3 teams need immediate support:
+
+1. **Platform Core** (URGENT) - Capacity CRITICAL, 98% utilization, 5 initiatives. Comments: 'team burned out, losing people'
+2. **Frontend Services** - Skillset CRITICAL (React gaps), working on P1 strategic initiative
+3. **Data Engineering** - Capacity At-Risk, Support At-Risk, 92% utilization. Comments: 'need better tools and API access'"
+
+#### Pattern 4: "What initiatives is [Team] working on?"
+
+**Process**:
+```javascript
+const teamInitiatives = window.boardData.initiatives.filter(init => 
+  init.teams.includes('Team Name')
+);
+```
+
+**Example Response**:
+"**Platform Core** is working on 5 initiatives:
+
+Above Mendoza line (priorities 1-15):
+1. Data Lake v2 (Priority 3, Strategic, Validated) - 45% complete
+2. API Gateway (Priority 5, Strategic, In-validation) - 30% complete
+3. Auth Service (Priority 8, KTLO, Validated) - 70% complete
+
+Below Mendoza line (priorities 16+):
+4. Logging Platform (Priority 18, KTLO) - 15% complete
+5. Monitoring Dashboard (Priority 22, Strategic, Not-validated) - 10% complete
+
+**Concern**: Team is spread across 5 initiatives with only 3 above the line. Capacity critical at 98% utilization."
+
+#### Pattern 5: "Why is [Team's] capacity at risk?"
+
+**Process**:
+1. Get team data
+2. Count initiatives
+3. Check utilization
+4. Look for patterns in comments
+5. Cross-reference with other at-risk dimensions
+
+**Example Response**:
+"**Backend Services** capacity is At-Risk because:
+
+1. **Initiative Overload**: Working on 4 initiatives simultaneously (healthy teams typically handle 2-3)
+2. **High Utilization**: At 92% capacity, leaving no buffer for emergencies
+3. **Skill Constraints**: Skillset also At-Risk (Python expertise gap) limits who can do the work
+4. **External Dependencies**: Comments indicate 'waiting on Platform team for 3 API integrations' - blocking 40% of stories
+
+**Recommendation**: Reduce to 2-3 initiatives OR add Python contractor support OR resolve Platform dependencies immediately."
+
+### 3.6 CRITICAL AI RULES FOR ANSWERING QUESTIONS
+
+#### ✅ ALWAYS DO:
+
+1. **Access real data first**: Query `window.boardData` directly - NEVER make up data
+2. **Read team comments**: Check `team.jira.comments` when analyzing team issues for critical context
+3. **Calculate risk scores**: Use exact formulas from section 3.4 when discussing risk
+4. **Use specific names**: Reference SPECIFIC team names, initiative names, and numbers
+5. **Explain implications**: Explain WHY (implications), not just WHAT (facts)
+6. **Prioritize by impact**: Above-line (priorities 1-15) matters most - always mention this context
+7. **Provide actionable insights**: Give specific next steps, not just observations
+8. **Use domain language**: "Mendoza line", "validation status", "health dimensions", "utilization"
+
+**Example of Good Answer**:
+"**API Modernization** (Priority 3) has a risk score of 16 (CRITICAL). Platform Team has Capacity CRITICAL at 98% utilization on 5 initiatives. Comments show 'team burned out, 2 people quit this month.' **Immediate action**: Move this initiative below Mendoza line (priority 20+) until Platform Team's capacity improves."
+
+#### ❌ NEVER DO:
+
+1. **Make up data**: Never fabricate team/initiative names, numbers, or status
+2. **Give vague answers**: Don't say "Some teams have issues" - name them specifically
+3. **Ignore comments**: Comments often contain the WHY behind health dimensions
+4. **Skip risk calculations**: When discussing risk, calculate the actual score
+5. **Treat all teams equally**: Critical > At-Risk > Healthy in priority
+6. **Ignore Mendoza line**: Above vs below the line matters hugely for waste/value
+7. **Use generic advice**: Avoid "you should improve capacity" - be specific about HOW
+
+**Example of Bad Answer** (NEVER DO THIS):
+"To assess team risk, you would need to look at their health dimensions and check if they have capacity issues. Teams with red indicators typically need support."
+
+#### Response Quality Standards:
+
+**Length Guidelines**:
+- Simple factual query: 2-3 sentences
+- Team/initiative analysis: 4-6 sentences  
+- Complex strategic question: 6-10 sentences
+- Pattern analysis: Group by theme, 3-5 patterns maximum
+
+**Formatting for Scannability**:
+- **Bold** team names, initiative names, and key insights
+- Use numbers and metrics prominently
+- Break into short paragraphs (3-4 lines max)
+- Use bullets for lists of 3+ items
+- Lead with the answer, supporting evidence second
+
+**Progressive Disclosure**:
+- Start with direct answer
+- Add supporting evidence
+- Offer deeper analysis: "Want me to analyze the root cause?" or "Curious about the strategic impact?"
+
+**Tone**:
+- Confident but not arrogant
+- Conversational but professional
+- Urgent when risk is high, calm when stable
+- Actionable - always provide next steps
+
 ---
 
 ## VOLUME 1 COMPLETE
-This volume contains the core foundation. Strategic frameworks are in Volume 2. Analysis methods are in Volume 3. Reference materials are in Volume 4.
+This volume contains the core foundation including data model, business logic, data access patterns, team comments analysis, and risk score calculations. Strategic frameworks are in Volume 2. Analysis methods and what-if scenarios are in Volume 3.
