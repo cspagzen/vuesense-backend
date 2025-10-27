@@ -20,6 +20,12 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 
+// Force UTF-8 encoding on all responses
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  next();
+});
+
 // Initialize OpenAI
 if (!process.env.OPENAI_API_KEY) {
   console.error('ERROR: OPENAI_API_KEY not set in environment variables');
@@ -48,9 +54,9 @@ ${vol2}
 ${vol3}
 `;
   
-  console.log('✅ Knowledge Base loaded successfully (8 volumes)');
-  console.log(`📚 Total KB size: ${(COMPLETE_KNOWLEDGE_BASE.length / 1024).toFixed(2)} KB`);
-  console.log(`📖 Volumes loaded: Core, Strategic, Analysis, Reference, User Guide, What-If, Prompts, Horizons`);
+  console.log('[OK] Knowledge Base loaded successfully (8 volumes)');
+  console.log(`[KB] Total KB size: ${(COMPLETE_KNOWLEDGE_BASE.length / 1024).toFixed(2)} KB`);
+  console.log(`[VOL] Volumes loaded: Core, Strategic, Analysis, Reference, User Guide, What-If, Prompts, Horizons`);
 } catch (error) {
   console.error('ERROR loading knowledge base:', error);
   // Fallback to minimal KB if files not found
@@ -122,11 +128,11 @@ ALWAYS:
 DO NOT MIX unless user explicitly asks for both.
 
 Examples:
-- "How balanced is my portfolio?" → Talk about INITIATIVES ONLY (10 strategic, 12 KTLO, etc.)
-- "How are my teams doing?" → Talk about TEAMS ONLY
-- "Is my portfolio healthy considering team capacity?" → NOW you can mention both
+- "How balanced is my portfolio?" â†’ Talk about INITIATIVES ONLY (10 strategic, 12 KTLO, etc.)
+- "How are my teams doing?" â†’ Talk about TEAMS ONLY
+- "Is my portfolio healthy considering team capacity?" â†’ NOW you can mention both
 
-If user asks about portfolio balance/strategy/direction/competitive gaps → INITIATIVES ONLY.
+If user asks about portfolio balance/strategy/direction/competitive gaps â†’ INITIATIVES ONLY.
 
 ========================================
 
@@ -161,27 +167,27 @@ ${portfolioData}
 - Default to 3-5 sentences MAX for simple queries - no walls of text, no exhaustive lists
 - Lead with the conclusion, then supporting evidence if needed
 - Use conversational tone - write like a human advisor, not a report generator
-- Progressive disclosure: Brief answer → Offer deeper analysis → Strategic frameworks (only if requested)
+- Progressive disclosure: Brief answer â†’ Offer deeper analysis â†’ Strategic frameworks (only if requested)
 - Next step offer should be strategic: "Want the strategic analysis?" NOT "Want to dive into specific items?"
 
 **Forbidden Response Patterns:**
-❌ "To assess X, we can look at..."
-❌ Starting with methodology before the answer
-❌ Listing every data point when synthesis is needed
-❌ Talking about teams when question is about initiatives
-❌ Walls of bullet points when prose would work
-❌ "Would you like to dive into specific X?" (too tactical)
+âŒ "To assess X, we can look at..."
+âŒ Starting with methodology before the answer
+âŒ Listing every data point when synthesis is needed
+âŒ Talking about teams when question is about initiatives
+âŒ Walls of bullet points when prose would work
+âŒ "Would you like to dive into specific X?" (too tactical)
 
 **Required Response Patterns:**
-✅ Direct answer first (2-3 sentences)
-✅ Supporting evidence second (1-2 sentences)
-✅ Strategic offer third: "Want the strategic picture?" or "Curious about the investment pattern?"
-✅ Stay focused on what was actually asked
-✅ Synthesize don't list - patterns over data dumps
+âœ… Direct answer first (2-3 sentences)
+âœ… Supporting evidence second (1-2 sentences)
+âœ… Strategic offer third: "Want the strategic picture?" or "Curious about the investment pattern?"
+âœ… Stay focused on what was actually asked
+âœ… Synthesize don't list - patterns over data dumps
 
 **What-If Scenarios:**
 - Report ONLY relevant initiatives (directly displaced, row changes, Mendoza crossings)
-- For moves: Show OLD slot/row → NEW slot/row for every affected initiative
+- For moves: Show OLD slot/row â†’ NEW slot/row for every affected initiative
 - Highlight Mendoza Line crossings prominently (these are CRITICAL)
 - Recalculate risk scores, efficiency, and delivery confidence after any change
 - Give clear recommendations, not just analysis
@@ -189,7 +195,7 @@ ${portfolioData}
 **Formatting Rules:**
 - When using numbered lists, use proper sequential numbering: 1, 2, 3 (NOT 1., 1., 1.)
 - Numbered lists are fine and encouraged for step-by-step instructions or multiple points
-- Use bullet points (•) for non-sequential items
+- Use bullet points (â€¢) for non-sequential items
 - Keep responses conversational and human-readable
 
 ==== RESPONSE FORMAT ====
@@ -206,7 +212,7 @@ For "What if" scenarios: Use Volume 6 framework - report slot AND row changes fo
     ];
     
     // Call OpenAI
-    console.log(`📤 Sending request to OpenAI (${openaiMessages.length} messages)`);
+    console.log(`[->] Sending request to OpenAI (${openaiMessages.length} messages)`);
     
     const completion = await openai.chat.completions.create({
       model: process.env.OPENAI_MODEL || 'gpt-5-mini',
@@ -218,7 +224,7 @@ For "What if" scenarios: Use Volume 6 framework - report slot AND row changes fo
       presence_penalty: 0
     });
     
-    console.log(`✅ OpenAI response received (${completion.usage.total_tokens} tokens)`);
+    console.log(`[OK] OpenAI response received (${completion.usage.total_tokens} tokens)`);
     
     // Return response
     res.json({
@@ -233,7 +239,7 @@ For "What if" scenarios: Use Volume 6 framework - report slot AND row changes fo
     });
     
   } catch (error) {
-    console.error('❌ Error in /api/chat:', error);
+    console.error('âŒ Error in /api/chat:', error);
     
     // Handle specific OpenAI errors
     if (error.status === 429) {
@@ -266,8 +272,8 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 VueSense Backend running on port ${PORT}`);
-  console.log(`📚 Knowledge Base: ${COMPLETE_KNOWLEDGE_BASE.length > 1000 ? 'Loaded (7 volumes)' : 'Using fallback'}`);
-  console.log(`🔑 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Configured' : 'MISSING!'}`);
-  console.log(`🤖 Model: ${process.env.OPENAI_MODEL || 'gpt-4o-mini'}`);
+  console.log(`[START] VueSense Backend running on port ${PORT}`);
+  console.log(`[KB] Knowledge Base: ${COMPLETE_KNOWLEDGE_BASE.length > 1000 ? 'Loaded (7 volumes)' : 'Using fallback'}`);
+  console.log(`[KEY] OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Configured' : 'MISSING!'}`);
+  console.log(`[MODEL] Model: ${process.env.OPENAI_MODEL || 'gpt-4o-mini'}`);
 });
